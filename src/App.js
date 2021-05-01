@@ -6,10 +6,10 @@ import Output from "./Output";
 class App extends Component {
   state = {
     units: [
-      { name: "centimeters", number: "0" },
-      { name: "meters", number: "0" },
-      { name: "inches", number: "0" },
-      { name: "feet", number: "0" },
+      { name: "centimeters", number: "0", abbr: "cm" },
+      { name: "meters", number: "0", abbr: "m" },
+      { name: "inches", number: "0", abbr: "in" },
+      { name: "feet", number: "0", abbr: "ft" },
     ],
     unitSelected: { value: "m" },
     inputField: { value: "0" },
@@ -36,17 +36,24 @@ class App extends Component {
       units: [
         {
           name: "centimeters",
-          number: (event.target.value * setUnit[0]).toFixed(1),
+          number: (event.target.value * setUnit[0]).toFixed(2),
+          abbr: "cm",
         },
         {
           name: "meters",
-          number: (event.target.value * setUnit[1]).toFixed(1),
+          number: (event.target.value * setUnit[1]).toFixed(2),
+          abbr: "m",
         },
         {
           name: "inches",
-          number: (event.target.value * setUnit[2]).toFixed(1),
+          number: (event.target.value * setUnit[2]).toFixed(2),
+          abbr: "in",
         },
-        { name: "feet", number: (event.target.value * setUnit[3]).toFixed(1) },
+        {
+          name: "feet",
+          number: (event.target.value * setUnit[3]).toFixed(2),
+          abbr: "ft",
+        },
       ],
       inputField: { value: event.target.value },
     });
@@ -59,19 +66,23 @@ class App extends Component {
       units: [
         {
           name: "centimeters",
-          number: this.state.inputField.value * setUnit[0],
+          number: (this.state.inputField.value * setUnit[0]).toFixed(2),
+          abbr: "cm",
         },
         {
           name: "meters",
-          number: (this.state.inputField.value * setUnit[1]).toFixed(1),
+          number: (this.state.inputField.value * setUnit[1]).toFixed(2),
+          abbr: "m",
         },
         {
           name: "inches",
-          number: (this.state.inputField.value * setUnit[2]).toFixed(1),
+          number: (this.state.inputField.value * setUnit[2]).toFixed(2),
+          abbr: "in",
         },
         {
           name: "feet",
-          number: (this.state.inputField.value * setUnit[3]).toFixed(1),
+          number: (this.state.inputField.value * setUnit[3]).toFixed(2),
+          abbr: "ft",
         },
       ],
       unitSelected: { value: event.target.value },
@@ -79,6 +90,7 @@ class App extends Component {
   };
 
   render() {
+    // let numberInInput = parseInt(this.state.inputField.value).toFixed(2);
     return (
       <>
         <h1>Length Unit Converter</h1>
@@ -93,7 +105,9 @@ class App extends Component {
         </div>
 
         {this.state.units.map((unit) => {
-          return <Output name={unit.name} number={unit.number} />;
+          if (this.state.unitSelected.value != unit.abbr) {
+            return <Output name={unit.name} number={unit.number} />;
+          }
         })}
       </>
     );
