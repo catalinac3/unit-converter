@@ -15,6 +15,7 @@ class App extends Component {
     inputField: { value: "0" },
   };
 
+  // depending on the unit chooses the needed conversion factors
   conversionFactors = (unit) => {
     switch (unit) {
       case "m":
@@ -28,69 +29,55 @@ class App extends Component {
     }
   };
 
-  /*trigger by the change of the input field */
+  // set the units list of objects for the state
+  settingUnits(setUnit, currentInput) {
+    let units = [
+      {
+        name: "centimeters",
+        number: (currentInput * setUnit[0]).toFixed(2),
+        abbr: "cm",
+      },
+      {
+        name: "meters",
+        number: (currentInput * setUnit[1]).toFixed(2),
+        abbr: "m",
+      },
+      {
+        name: "inches",
+        number: (currentInput * setUnit[2]).toFixed(2),
+        abbr: "in",
+      },
+      {
+        name: "feet",
+        number: (currentInput * setUnit[3]).toFixed(2),
+        abbr: "ft",
+      },
+    ];
+    return units;
+  }
+
+  // trigger by the change of the input field
   unitConversion = (event) => {
     const setUnit = this.conversionFactors(this.state.unitSelected.value);
+    const currentInput = event.target.value;
 
     this.setState({
-      units: [
-        {
-          name: "centimeters",
-          number: (event.target.value * setUnit[0]).toFixed(2),
-          abbr: "cm",
-        },
-        {
-          name: "meters",
-          number: (event.target.value * setUnit[1]).toFixed(2),
-          abbr: "m",
-        },
-        {
-          name: "inches",
-          number: (event.target.value * setUnit[2]).toFixed(2),
-          abbr: "in",
-        },
-        {
-          name: "feet",
-          number: (event.target.value * setUnit[3]).toFixed(2),
-          abbr: "ft",
-        },
-      ],
-      inputField: { value: event.target.value },
+      units: this.settingUnits(setUnit, currentInput),
+      inputField: { value: currentInput },
     });
   };
 
   // trigger by change on the dropbox
   unitSelected = (event) => {
     const setUnit = this.conversionFactors(event.target.value);
+    const currentInput = this.state.inputField.value;
     this.setState({
-      units: [
-        {
-          name: "centimeters",
-          number: (this.state.inputField.value * setUnit[0]).toFixed(2),
-          abbr: "cm",
-        },
-        {
-          name: "meters",
-          number: (this.state.inputField.value * setUnit[1]).toFixed(2),
-          abbr: "m",
-        },
-        {
-          name: "inches",
-          number: (this.state.inputField.value * setUnit[2]).toFixed(2),
-          abbr: "in",
-        },
-        {
-          name: "feet",
-          number: (this.state.inputField.value * setUnit[3]).toFixed(2),
-          abbr: "ft",
-        },
-      ],
+      units: this.settingUnits(setUnit, currentInput),
       unitSelected: { value: event.target.value },
     });
   };
 
   render() {
-    // let numberInInput = parseInt(this.state.inputField.value).toFixed(2);
     return (
       <>
         <h1>Length Unit Converter</h1>
@@ -99,7 +86,6 @@ class App extends Component {
           <UserInput
             unitChanged={this.unitSelected}
             changed={this.unitConversion}
-            // changed={this.unitConversion.bind(this,unit)}
             unit={this.state.units[0].number}
           />
         </div>
